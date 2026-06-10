@@ -26,7 +26,6 @@ app.post('/analyze', async (req, res) => {
     });
 
     const data = await response.json();
-
     const text = data.content?.map(c => c.text || '').join('') || '';
     const clean = text.replace(/```json|```/g, '').trim();
 
@@ -41,11 +40,6 @@ app.post('/analyze', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-app.get('/', (req, res) => res.send('Datero backend OK'));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
 
 app.get('/', (req, res) => res.send('Datero backend OK'));
 
