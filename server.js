@@ -26,6 +26,11 @@ app.post('/analyze', async (req, res) => {
     });
 
     const data = await response.json();
+
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message || JSON.stringify(data.error) });
+    }
+
     const text = data.content?.map(c => c.text || '').join('') || '';
     const clean = text.replace(/```json|```/g, '').trim();
 
@@ -33,7 +38,7 @@ app.post('/analyze', async (req, res) => {
       const parsed = JSON.parse(clean);
       res.json(parsed);
     } catch(e) {
-      res.status(500).json({ error: 'Parse error', raw: text });
+      res.status(500).json({ error: 'Parse error', raw: clean.slice(0, 300) });
     }
 
   } catch (err) {
